@@ -89,9 +89,11 @@ export interface JobRequest<T = Record<string, unknown>> {
 
 export interface RenderedPage {
   page: number
+  /** JPEG data URL, or '' when the page could not be rasterised */
   dataUrl: string
   width: number
   height: number
+  failed?: boolean
 }
 
 export interface AppSettings {

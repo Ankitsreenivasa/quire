@@ -162,7 +162,14 @@ export function WatermarkEditor({ file, values, onChange }: Props): JSX.Element 
           className="relative max-w-full select-none shadow-card"
           style={{ width: page.width * dispScale || '100%', lineHeight: 0 }}
         >
-          <img src={page.dataUrl} alt="" className="w-full" draggable={false} />
+          {page.dataUrl ? (
+            <img src={page.dataUrl} alt="" className="w-full" draggable={false} />
+          ) : (
+            <div
+              className="w-full bg-white"
+              style={{ aspectRatio: `${page.width} / ${page.height}` }}
+            />
+          )}
 
           {/* tiled preview */}
           {tile && (

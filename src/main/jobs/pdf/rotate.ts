@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs'
-import { PDFDocument, degrees } from 'pdf-lib'
+import { degrees } from 'pdf-lib'
+import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { parsePageRange } from './ranges'
 import { throwIfAborted, type JobRunner } from '../types'
@@ -17,7 +17,7 @@ export const rotatePdf: JobRunner = async (req, ctx) => {
   for (let i = 0; i < req.files.length; i++) {
     throwIfAborted(ctx.signal)
     const f = req.files[i]
-    const doc = await PDFDocument.load(await fs.readFile(f.path))
+    const doc = await loadPdfDoc(f.path)
     const total = doc.getPageCount()
     const target = opts.pages ? new Set(parsePageRange(opts.pages, total)) : null
     doc.getPages().forEach((page, idx) => {

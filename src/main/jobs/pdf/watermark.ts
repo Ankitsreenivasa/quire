@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs'
-import { PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib'
+import { type PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib'
+import { loadPdfDoc } from './load'
 import sharp from 'sharp'
 import { writeResult, stem } from '../fsutil'
 import { parsePageRange } from './ranges'
@@ -43,7 +43,7 @@ export const watermarkPdf: JobRunner = async (req, ctx) => {
   for (let i = 0; i < req.files.length; i++) {
     throwIfAborted(ctx.signal)
     const f = req.files[i]
-    const doc = await PDFDocument.load(await fs.readFile(f.path))
+    const doc = await loadPdfDoc(f.path)
     const pages = doc.getPages()
     const target = opts.pages ? new Set(parsePageRange(opts.pages, pages.length)) : null
 

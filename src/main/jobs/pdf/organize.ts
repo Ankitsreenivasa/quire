@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs'
 import { PDFDocument, degrees } from 'pdf-lib'
+import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { throwIfAborted, type JobRunner } from '../types'
 
@@ -20,7 +20,7 @@ export const organizePdf: JobRunner = async (req, ctx) => {
   const combined = await PDFDocument.create()
   for (const f of req.files) {
     throwIfAborted(ctx.signal)
-    const src = await PDFDocument.load(await fs.readFile(f.path))
+    const src = await loadPdfDoc(f.path)
     const copied = await combined.copyPages(src, src.getPageIndices())
     copied.forEach((p) => combined.addPage(p))
   }

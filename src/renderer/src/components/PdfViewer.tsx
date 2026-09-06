@@ -65,15 +65,25 @@ export function PdfViewer({ path, className }: Props): JSX.Element {
         {state === 'error' && (
           <p className="py-10 text-sm text-muted">This file can’t be previewed.</p>
         )}
-        {pages.map((pg) => (
-          <img
-            key={pg.page}
-            src={pg.dataUrl}
-            alt={`Page ${pg.page}`}
-            className="rounded shadow-card"
-            style={{ width: 520 * zoom, height: 'auto' }}
-          />
-        ))}
+        {pages.map((pg) =>
+          pg.dataUrl ? (
+            <img
+              key={pg.page}
+              src={pg.dataUrl}
+              alt={`Page ${pg.page}`}
+              className="rounded shadow-card"
+              style={{ width: 520 * zoom, height: 'auto' }}
+            />
+          ) : (
+            <div
+              key={pg.page}
+              className="flex items-center justify-center rounded bg-white text-xs text-neutral-400 shadow-card"
+              style={{ width: 520 * zoom, height: (520 * zoom * pg.height) / pg.width }}
+            >
+              Page {pg.page} — preview unavailable
+            </div>
+          )
+        )}
       </div>
     </div>
   )

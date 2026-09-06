@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs'
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib'
+import { StandardFonts, rgb } from 'pdf-lib'
+import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { parsePageRange } from './ranges'
 import { throwIfAborted, type JobRunner } from '../types'
@@ -36,7 +36,7 @@ export const pageNumbersPdf: JobRunner = async (req, ctx) => {
   for (let i = 0; i < req.files.length; i++) {
     throwIfAborted(ctx.signal)
     const f = req.files[i]
-    const doc = await PDFDocument.load(await fs.readFile(f.path))
+    const doc = await loadPdfDoc(f.path)
     const font = await doc.embedFont(StandardFonts.Helvetica)
     const pages = doc.getPages()
     const target = opts.pages ? new Set(parsePageRange(opts.pages, pages.length)) : null

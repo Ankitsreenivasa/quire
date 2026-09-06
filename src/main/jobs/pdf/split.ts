@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs'
 import { PDFDocument } from 'pdf-lib'
+import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { parseRangeGroups, parsePageRange } from './ranges'
 import { throwIfAborted, type JobRunner } from '../types'
@@ -26,7 +26,7 @@ export const splitPdf: JobRunner = async (req, ctx) => {
   for (let fi = 0; fi < req.files.length; fi++) {
     throwIfAborted(ctx.signal)
     const f = req.files[fi]
-    const src = await PDFDocument.load(await fs.readFile(f.path))
+    const src = await loadPdfDoc(f.path)
     const total = src.getPageCount()
     const base = stem(f.path)
 
