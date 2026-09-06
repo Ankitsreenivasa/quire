@@ -28,6 +28,8 @@ const api = {
     targetDir?: string
   ): Promise<{ saved: number; dir: string | null }> =>
     ipcRenderer.invoke(IPC.saveResults, files, targetDir),
+  renameResult: (path: string, desired: string): Promise<JobResultFile> =>
+    ipcRenderer.invoke(IPC.renameResult, path, desired),
   revealPath: (p: string): Promise<void> => ipcRenderer.invoke(IPC.revealPath, p),
   openPath: (p: string): Promise<string> => ipcRenderer.invoke(IPC.openPath, p),
   getSettings: (): Promise<AppSettings> => ipcRenderer.invoke(IPC.getSettings),

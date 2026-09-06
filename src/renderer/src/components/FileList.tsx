@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, X, Crop, FileText } from 'lucide-react'
+import { ArrowUp, ArrowDown, X, Crop, FileText, Eye } from 'lucide-react'
 import type { InputFile } from '@shared/types'
 import { formatBytes, formatDuration } from '@/lib/cn'
 
@@ -9,9 +9,18 @@ interface Props {
   onRemove: (id: string) => void
   onMove: (id: string, dir: -1 | 1) => void
   onEdit?: (id: string) => void
+  onView?: (id: string) => void
 }
 
-export function FileList({ files, reorder, editable, onRemove, onMove, onEdit }: Props): JSX.Element {
+export function FileList({
+  files,
+  reorder,
+  editable,
+  onRemove,
+  onMove,
+  onEdit,
+  onView
+}: Props): JSX.Element {
   return (
     <ul className="space-y-2">
       {files.map((f, i) => {
@@ -38,6 +47,15 @@ export function FileList({ files, reorder, editable, onRemove, onMove, onEdit }:
             </div>
 
             <div className="flex items-center gap-1">
+              {onView && (
+                <button
+                  className="btn-ghost h-8 w-8 p-0"
+                  title="Preview"
+                  onClick={() => onView(f.id)}
+                >
+                  <Eye size={15} />
+                </button>
+              )}
               {editable && onEdit && (
                 <button
                   className="btn-ghost h-8 w-8 p-0"

@@ -41,3 +41,36 @@ export async function renderPdfThumbnails(
   await doc.cleanup()
   return out
 }
+
+/** Render pages at a given on-screen width (CSS px), for a readable viewer. */
+export async function renderPdfPages(
+  url: string,
+  cssWidth = 640,
+  onProgress?: (done: number, total: number) => void
+): Promise<PageThumb[]> {
+  const doc = await pdfjsLib.getDocument({ url }).promise
+  const dpr = Math.min(2, window.devicePixelRatio || 1)
+  const out: PageThumb[] = []
+  for (let p = 1; p <= doc.numPages; p++) {
+    const page = await doc.getPage(p)
+    const base = page.getViewport({ scale: 1 })
+    const scale = (cssWidth / base.width) * dpr
+    const viewport = page.getViewport({ scale })
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.ceil(viewport.width)
+    canvas.height = Math.ceil(viewport.height)
+    const context = canvas.getContext('2d')!
+    context.fillStyle = '#fff'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    await page.render({ canvasContext: context, viewport }).promise
+    out.push({
+      page: p,
+      dataUrl: canvas.toDataURL('image/jpeg', 0.85),
+      width: canvas.width / dpr,
+      height: canvas.height / dpr
+    })
+    onProgress?.(p, doc.numPages)
+  }
+  await doc.cleanup()
+  return out
+}

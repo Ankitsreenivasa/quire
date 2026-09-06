@@ -1,7 +1,7 @@
 import { ipcMain, dialog, shell, BrowserWindow, nativeTheme } from 'electron'
 import { promises as fs } from 'fs'
-import { join, basename } from 'path'
-import { IPC, type JobRequest, type ThemeMode } from '../../shared/types'
+import { join, basename, dirname, extname, parse } from 'path'
+import { IPC, type JobRequest, type JobResultFile, type ThemeMode } from '../../shared/types'
 import { jobQueue } from '../jobs/queue'
 import { probeFiles } from '../jobs/probe'
 import { uniquePath, ensureDir } from '../jobs/fsutil'
@@ -51,6 +51,20 @@ export function registerIpc(getWindow: () => BrowserWindow | null): void {
     }
     return { saved, dir }
   })
+
+  ipcMain.handle(
+    IPC.renameResult,
+    async (_e, filePath: string, desired: string): Promise<JobResultFile> => {
+      const dir = dirname(filePath)
+      const origExt = extname(filePath)
+      // keep the original extension; let the user rename only the stem
+      const wanted = parse(desired).name.replace(/[/\\:*?"<>|]/g, '').trim() || parse(filePath).name
+      const target = await uniquePath(dir, `${wanted}${origExt}`)
+      if (target !== filePath) await fs.rename(filePath, target)
+      const stat = await fs.stat(target)
+      return { path: target, name: basename(target), size: stat.size }
+    }
+  )
 
   ipcMain.handle(IPC.revealPath, (_e, p: string) => shell.showItemInFolder(p))
   ipcMain.handle(IPC.openPath, (_e, p: string) => shell.openPath(p))

@@ -107,6 +107,7 @@ export const IPC = {
   pickFiles: 'dialog:pickFiles',
   pickDir: 'dialog:pickDir',
   saveResults: 'results:save',
+  renameResult: 'results:rename',
   revealPath: 'shell:reveal',
   openPath: 'shell:open',
   getSettings: 'settings:get',

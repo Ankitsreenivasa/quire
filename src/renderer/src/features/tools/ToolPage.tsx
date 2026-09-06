@@ -10,6 +10,7 @@ import { OptionsPanel } from '@/components/OptionsPanel'
 import { ProgressView } from '@/components/ProgressView'
 import { ResultView } from '@/components/ResultView'
 import { ImageEditor } from '@/features/editor/ImageEditor'
+import { PreviewModal } from '@/components/PreviewModal'
 import { PageGrid, type PageItem } from './PageGrid'
 import { useAppStore } from '@/store/useAppStore'
 
@@ -32,6 +33,7 @@ export function ToolPage(): JSX.Element {
   const [files, setFiles] = useState<InputFile[]>([])
   const [options, setOptions] = useState<Record<string, FieldValue>>({})
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [viewingId, setViewingId] = useState<string | null>(null)
   const [pageItems, setPageItems] = useState<PageItem[]>([])
   const [phase, setPhase] = useState<'setup' | 'running' | 'done'>('setup')
   const [progress, setProgress] = useState<JobProgress | null>(null)
@@ -49,6 +51,17 @@ export function ToolPage(): JSX.Element {
     return window.api.onJobProgress((p) => {
       if (p.jobId === jobIdRef.current) setProgress(p)
     })
+  }, [])
+
+  // Test / automation seam: inject real file paths without the native dialog.
+  useEffect(() => {
+    ;(window as unknown as { __addFiles?: (p: string[]) => void }).__addFiles = async (paths) => {
+      const probed = await window.api.probeFiles(paths)
+      setFiles((cur) => {
+        const seen = new Set(cur.map((f) => f.path))
+        return [...cur, ...probed.filter((f) => !seen.has(f.path))]
+      })
+    }
   }, [])
 
   const canRun = useMemo(
@@ -168,6 +181,7 @@ export function ToolPage(): JSX.Element {
                       onRemove={(id) => setFiles((c) => c.filter((f) => f.id !== id))}
                       onMove={move}
                       onEdit={(id) => setEditingId(id)}
+                      onView={(id) => setViewingId(id)}
                     />
                   )}
                   {tool.multiple && (
@@ -206,6 +220,11 @@ export function ToolPage(): JSX.Element {
           onApply={applyTransforms}
         />
       )}
+
+      <PreviewModal
+        path={files.find((f) => f.id === viewingId)?.path ?? null}
+        onClose={() => setViewingId(null)}
+      />
     </div>
   )
 }

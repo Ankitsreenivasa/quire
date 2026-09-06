@@ -5,7 +5,17 @@ import { registerIpc } from './ipc'
 import { getSettings } from './store'
 
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'media', privileges: { secure: true, supportFetchAPI: true, stream: true, bypassCSP: false } }
+  {
+    scheme: 'media',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      stream: true,
+      corsEnabled: true,
+      bypassCSP: false
+    }
+  }
 ])
 
 let mainWindow: BrowserWindow | null = null
@@ -41,9 +51,12 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
-  protocol.handle('media', (request) => {
+  protocol.handle('media', async (request) => {
     const path = decodeURIComponent(new URL(request.url).pathname)
-    return net.fetch(pathToFileURL(path).toString())
+    const res = await net.fetch(pathToFileURL(path).toString())
+    const headers = new Headers(res.headers)
+    headers.set('Access-Control-Allow-Origin', '*')
+    return new Response(res.body, { status: res.status, headers })
   })
   nativeTheme.themeSource = getSettings().theme
   registerIpc(() => mainWindow)
