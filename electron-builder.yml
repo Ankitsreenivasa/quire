@@ -1,0 +1,22 @@
+appId: com.sreenigo.pdfconverter
+productName: PDF Converter
+directories:
+  output: dist
+  buildResources: build
+files:
+  - out/**/*
+  - package.json
+asarUnpack:
+  - node_modules/sharp/**/*
+  - node_modules/@img/**/*
+  - node_modules/@napi-rs/**/*
+  - node_modules/ffmpeg-static/**/*
+  - node_modules/ffprobe-static/**/*
+mac:
+  target: [dmg]
+  category: public.app-category.productivity
+win:
+  target: [nsis]
+linux:
+  target: [AppImage]
+  category: Utility
