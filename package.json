@@ -1,6 +1,6 @@
 {
   "name": "pdf-converter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An iLovePDF-style desktop app for converting, editing and compressing PDFs, images and video.",
   "main": "./out/main/index.js",
   "author": "sreenigo",
