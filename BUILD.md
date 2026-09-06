@@ -34,7 +34,7 @@ Outputs (file names are version-free so `releases/latest/download/<name>` permal
 |---|---|
 | macOS | `PDF-Converter-mac-arm64.dmg`, `PDF-Converter-mac-x64.dmg`, `PDF-Converter-mac-{arm64,x64}.zip` |
 | Windows | `PDF-Converter-win-x64.exe` (NSIS) |
-| Linux | `PDF-Converter-linux-x64.AppImage`, `PDF-Converter-linux-x64.deb` |
+| Linux | `PDF-Converter-linux-x86_64.AppImage`, `PDF-Converter-linux-amd64.deb` |
 
 ## Local single-OS build
 
@@ -61,5 +61,5 @@ available, add `mac.identity`, an `entitlements` file and the `APPLE_ID` / `APPL
 - **macOS**: right-click the app → **Open** → **Open** (once). Or, if it was quarantined:
   `xattr -dr com.apple.quarantine "/Applications/PDF Converter.app"`.
 - **Windows**: SmartScreen → **More info** → **Run anyway**.
-- **Linux**: `chmod +x PDF-Converter-linux-x64.AppImage` then run it. For the `.deb`:
-  `sudo apt install ./PDF-Converter-linux-x64.deb`.
+- **Linux**: `chmod +x PDF-Converter-linux-x86_64.AppImage` then run it. For the `.deb`:
+  `sudo apt install ./PDF-Converter-linux-amd64.deb`.

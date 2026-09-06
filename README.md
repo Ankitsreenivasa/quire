@@ -12,8 +12,8 @@ Latest build for your OS (always the newest published release):
 | **macOS** — Apple Silicon (M1–M4) | [PDF-Converter-mac-arm64.dmg](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-mac-arm64.dmg) |
 | **macOS** — Intel | [PDF-Converter-mac-x64.dmg](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-mac-x64.dmg) |
 | **Windows** 10 / 11 (x64) | [PDF-Converter-win-x64.exe](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-win-x64.exe) |
-| **Linux** — portable | [PDF-Converter-linux-x64.AppImage](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-linux-x64.AppImage) |
-| **Linux** — Debian / Ubuntu | [PDF-Converter-linux-x64.deb](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-linux-x64.deb) |
+| **Linux** — portable | [PDF-Converter-linux-x86_64.AppImage](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-linux-x86_64.AppImage) |
+| **Linux** — Debian / Ubuntu | [PDF-Converter-linux-amd64.deb](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-linux-amd64.deb) |
 
 All other builds (older versions, macOS `.zip`) are on the
 [Releases](https://github.com/Ankitsreenivasa/quire/releases) page.
@@ -23,7 +23,7 @@ Builds are **not code-signed** yet, so the OS warns on first launch — see
 
 - **macOS**: right-click the app → **Open** → **Open**
 - **Windows**: **More info** → **Run anyway**
-- **Linux**: `chmod +x PDF-Converter-linux-x64.AppImage` then run it
+- **Linux**: `chmod +x PDF-Converter-linux-x86_64.AppImage` then run it
 
 ## Features
 
