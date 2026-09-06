@@ -3,7 +3,10 @@
   "version": "0.2.0",
   "description": "An iLovePDF-style desktop app for converting, editing and compressing PDFs, images and video.",
   "main": "./out/main/index.js",
-  "author": "sreenigo",
+  "author": {
+    "name": "Ankit Sreenivasa",
+    "email": "ankit.sreeni@gmail.com"
+  },
   "license": "MIT",
   "scripts": {
     "dev": "electron-vite dev",

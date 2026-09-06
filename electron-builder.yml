@@ -34,4 +34,5 @@ win:
 linux:
   icon: build/icon.png
   category: Utility
+  maintainer: Ankit Sreenivasa <ankit.sreeni@gmail.com>
   target: [AppImage, deb]
