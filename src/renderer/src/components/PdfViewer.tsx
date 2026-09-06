@@ -18,7 +18,7 @@ export function PdfViewer({ path, className }: Props): JSX.Element {
     setState('loading')
     setPages([])
     window.api
-      .renderPdf(path, 800)
+      .renderPdf(path, Math.round(760 * (window.devicePixelRatio || 1) * 1.6))
       .then((p) => {
         if (cancelled) return
         setPages(p)

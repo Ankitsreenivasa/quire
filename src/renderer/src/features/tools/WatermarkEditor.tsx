@@ -24,7 +24,7 @@ export function WatermarkEditor({ file, values, onChange }: Props): JSX.Element 
     let cancelled = false
     setState('loading')
     window.api
-      .renderPdf(file.path, 900)
+      .renderPdf(file.path, Math.round(1000 * (window.devicePixelRatio || 1) * 1.4))
       .then((p) => {
         if (cancelled) return
         setPages(p)
