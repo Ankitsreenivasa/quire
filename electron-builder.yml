@@ -12,11 +12,26 @@ asarUnpack:
   - node_modules/@napi-rs/**/*
   - node_modules/ffmpeg-static/**/*
   - node_modules/ffprobe-static/**/*
+# Every native dep ships as a prebuilt binary — no compile step on any runner.
+npmRebuild: false
+# CI attaches installers to the Release itself (softprops/action-gh-release);
+# electron-builder is always invoked with --publish never.
+publish: null
 mac:
-  target: [dmg]
   category: public.app-category.productivity
+  icon: build/icon.icns
+  identity: null
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
 win:
-  target: [nsis]
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
 linux:
-  target: [AppImage]
+  icon: build/icon.png
   category: Utility
+  target: [AppImage, deb]
