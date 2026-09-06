@@ -1,15 +1,16 @@
 import { FolderOpen, Trash2 } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
 import { formatBytes } from '@/lib/cn'
+import { Page } from '@/components/Page'
 
 export function HistoryPage(): JSX.Element {
   const history = useAppStore((s) => s.history)
   const clearHistory = useAppStore((s) => s.clearHistory)
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-8">
+    <Page width="form">
       <div className="mb-5 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">History</h1>
+        <h1 className="font-display text-3xl font-semibold">History</h1>
         {history.length > 0 && (
           <button className="btn-ghost text-muted" onClick={() => clearHistory()}>
             <Trash2 size={14} /> Clear
@@ -41,6 +42,6 @@ export function HistoryPage(): JSX.Element {
           ))}
         </ul>
       )}
-    </div>
+    </Page>
   )
 }

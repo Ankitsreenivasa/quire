@@ -3,3 +3,6 @@ out/
 dist/
 .DS_Store
 *.log
+
+# build info
+*.tsbuildinfo

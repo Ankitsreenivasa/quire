@@ -11,16 +11,21 @@ module.exports = {
         border: 'rgb(var(--border) / <alpha-value>)',
         fg: 'rgb(var(--fg) / <alpha-value>)',
         muted: 'rgb(var(--muted) / <alpha-value>)',
+        accent: 'rgb(var(--accent) / <alpha-value>)',
         brand: {
           DEFAULT: 'rgb(var(--brand) / <alpha-value>)',
           fg: 'rgb(var(--brand-fg) / <alpha-value>)'
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Fraunces', 'Georgia', 'Cambria', 'Times New Roman', 'serif']
+      },
+      maxWidth: {
+        page: '1600px'
       },
       boxShadow: {
-        card: '0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.12)'
+        card: '0 1px 2px rgb(40 30 15 / 0.05), 0 12px 32px -14px rgb(40 30 15 / 0.18)'
       }
     }
   },

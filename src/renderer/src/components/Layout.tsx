@@ -12,9 +12,11 @@ export function Layout({ children }: { children: React.ReactNode }): JSX.Element
           <button className="btn-ghost h-8 w-8 p-0" onClick={() => navigate(-1)} title="Back">
             <ChevronLeft size={17} />
           </button>
-          <NavLink to="/" className="ml-1 flex items-center gap-2 text-sm font-bold">
-            <span className="grid h-6 w-6 place-items-center rounded-md bg-brand text-brand-fg">P</span>
-            PDF Converter
+          <NavLink to="/" className="ml-1 flex items-center gap-2">
+            <span className="grid h-6 w-6 place-items-center rounded-md bg-brand font-display text-[15px] font-semibold leading-none text-brand-fg">
+              P
+            </span>
+            <span className="font-display text-[15px] font-semibold tracking-tight">PDF Converter</span>
           </NavLink>
         </div>
         <nav className="flex items-center gap-1 no-drag">

@@ -2,37 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * "Atelier" — warm paper & ink. A deliberately editorial identity: warm paper in
+ * light mode, deep warm-black in dark mode, a single persimmon accent, and a
+ * serif display face paired with a clean sans for UI.
+ */
 :root {
-  --bg: 246 247 249;
-  --surface: 255 255 255;
-  --surface-2: 241 243 246;
-  --border: 226 229 234;
-  --fg: 17 24 33;
-  --muted: 106 116 128;
-  --brand: 225 48 68;
+  --bg: 244 241 234;
+  --surface: 252 250 245;
+  --surface-2: 237 232 221;
+  --border: 222 215 198;
+  --fg: 33 30 26;
+  --muted: 110 103 90;
+  --brand: 196 86 46;
   --brand-fg: 255 255 255;
+  --accent: 44 110 106;
 }
 
 .dark {
-  --bg: 11 15 20;
-  --surface: 19 25 33;
-  --surface-2: 27 34 44;
-  --border: 39 48 60;
-  --fg: 233 238 244;
-  --muted: 148 160 173;
-  --brand: 240 74 94;
-  --brand-fg: 255 255 255;
+  --bg: 22 19 15;
+  --surface: 30 26 21;
+  --surface-2: 39 34 26;
+  --border: 58 51 39;
+  --fg: 239 233 220;
+  --muted: 163 154 136;
+  --brand: 224 107 65;
+  --brand-fg: 24 20 16;
+  --accent: 90 170 162;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
-html,
-body,
-#root {
-  height: 100%;
-}
+html, body, #root { height: 100%; }
 
 body {
   margin: 0;
@@ -42,43 +43,24 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
+::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb {
   background: rgb(var(--border));
   border-radius: 999px;
   border: 2px solid rgb(var(--bg));
 }
 
-.drag-region {
-  -webkit-app-region: drag;
-}
-.no-drag {
-  -webkit-app-region: no-drag;
-}
+.drag-region { -webkit-app-region: drag; }
+.no-drag { -webkit-app-region: no-drag; }
 
 @layer components {
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:pointer-events-none no-drag;
   }
-  .btn-primary {
-    @apply btn bg-brand text-brand-fg hover:brightness-110;
-  }
-  .btn-ghost {
-    @apply btn text-fg hover:bg-surface-2;
-  }
-  .btn-outline {
-    @apply btn border border-border text-fg hover:bg-surface-2;
-  }
-  .card {
-    @apply rounded-xl border border-border bg-surface shadow-card;
-  }
-  .input {
-    @apply w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand no-drag;
-  }
-  .label {
-    @apply text-xs font-medium text-muted;
-  }
+  .btn-primary { @apply btn bg-brand text-brand-fg hover:brightness-110; }
+  .btn-ghost   { @apply btn text-fg hover:bg-surface-2; }
+  .btn-outline { @apply btn border border-border text-fg hover:bg-surface-2; }
+  .card  { @apply rounded-xl border border-border bg-surface shadow-card; }
+  .input { @apply w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm outline-none focus:border-brand no-drag; }
+  .label { @apply text-xs font-medium text-muted; }
 }

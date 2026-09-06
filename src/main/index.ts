@@ -29,7 +29,7 @@ function createWindow(): void {
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
-    backgroundColor: nativeTheme.shouldUseDarkColors ? '#0b0f14' : '#f6f7f9',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#16130F' : '#F4F1EA',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false

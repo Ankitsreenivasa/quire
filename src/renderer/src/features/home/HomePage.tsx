@@ -4,6 +4,7 @@ import { Search } from 'lucide-react'
 import { TOOLS, CATEGORY_LABELS } from '@/tools/registry'
 import type { ToolCategory } from '@shared/types'
 import { cn } from '@/lib/cn'
+import { Page } from '@/components/Page'
 
 const CATS: (ToolCategory | 'all')[] = ['all', 'organize', 'optimize', 'convert', 'edit', 'media']
 
@@ -19,11 +20,11 @@ export function HomePage(): JSX.Element {
   }, [query, cat])
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10">
-      <h1 className="text-center text-3xl font-bold tracking-tight">
+    <Page>
+      <h1 className="text-center font-display text-4xl font-semibold tracking-tight">
         Every tool you need to work with files
       </h1>
-      <p className="mx-auto mt-2 max-w-xl text-center text-sm text-muted">
+      <p className="mx-auto mt-3 max-w-xl text-center text-sm text-muted">
         Convert, merge, split, compress, crop and edit PDFs, images and video — all offline on
         your machine.
       </p>
@@ -53,7 +54,7 @@ export function HomePage(): JSX.Element {
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {tools.map((t) => (
           <Link
             key={t.id}
@@ -74,6 +75,6 @@ export function HomePage(): JSX.Element {
       {!tools.length && (
         <p className="mt-16 text-center text-sm text-muted">No tools match “{query}”.</p>
       )}
-    </div>
+    </Page>
   )
 }

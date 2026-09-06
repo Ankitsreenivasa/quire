@@ -1,5 +1,6 @@
 import { FolderOpen } from 'lucide-react'
 import { useAppStore } from '@/store/useAppStore'
+import { Page } from '@/components/Page'
 
 export function SettingsPage(): JSX.Element {
   const settings = useAppStore((s) => s.settings)
@@ -7,8 +8,8 @@ export function SettingsPage(): JSX.Element {
   if (!settings) return <div className="p-8" />
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-8">
-      <h1 className="mb-6 text-2xl font-bold">Settings</h1>
+    <Page width="form">
+      <h1 className="mb-6 font-display text-3xl font-semibold">Settings</h1>
 
       <div className="card divide-y divide-border">
         <Row label="Output folder" hint="Where converted files are written.">
@@ -55,7 +56,7 @@ export function SettingsPage(): JSX.Element {
       <p className="mt-4 text-xs text-muted">
         Theme is set from the top bar. All processing happens locally — nothing is uploaded.
       </p>
-    </div>
+    </Page>
   )
 }
 
