@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import { execFile } from 'child_process'
 import { promisify } from 'util'
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument } from '@cantoo/pdf-lib'
 import { createCanvas } from '@napi-rs/canvas'
 import sharp from 'sharp'
 import { loadPdf, NodeCanvasFactory } from './pdfjs'

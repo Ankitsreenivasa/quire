@@ -1,5 +1,5 @@
 import { promises as fs } from 'fs'
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument } from '@cantoo/pdf-lib'
 
 /**
  * Load a PDF for editing. `ignoreEncryption` lets us open the very common

@@ -1,4 +1,4 @@
-import { PDFDocument, degrees } from 'pdf-lib'
+import { PDFDocument, degrees } from '@cantoo/pdf-lib'
 import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { throwIfAborted, type JobRunner } from '../types'

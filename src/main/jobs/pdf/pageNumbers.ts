@@ -1,4 +1,4 @@
-import { StandardFonts, rgb } from 'pdf-lib'
+import { StandardFonts, rgb } from '@cantoo/pdf-lib'
 import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { parsePageRange } from './ranges'

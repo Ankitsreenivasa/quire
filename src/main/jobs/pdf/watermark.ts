@@ -1,4 +1,4 @@
-import { type PDFDocument, StandardFonts, degrees, rgb } from 'pdf-lib'
+import { type PDFDocument, StandardFonts, degrees, rgb } from '@cantoo/pdf-lib'
 import { loadPdfDoc } from './load'
 import sharp from 'sharp'
 import { writeResult, stem } from '../fsutil'

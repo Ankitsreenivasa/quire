@@ -26,6 +26,8 @@ const api = {
   pickFiles: (filters?: Electron.FileFilter[]): Promise<string[]> =>
     ipcRenderer.invoke(IPC.pickFiles, filters),
   pickDir: (): Promise<string | null> => ipcRenderer.invoke(IPC.pickDir),
+  saveTempImage: (dataUrl: string): Promise<string> =>
+    ipcRenderer.invoke(IPC.saveTempImage, dataUrl),
   saveResults: (
     files: JobResultFile[],
     targetDir?: string

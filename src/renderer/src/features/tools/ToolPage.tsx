@@ -13,9 +13,25 @@ import { ImageEditor } from '@/features/editor/ImageEditor'
 import { PreviewModal } from '@/components/PreviewModal'
 import { PageGrid, type PageItem } from './PageGrid'
 import { WatermarkEditor } from './WatermarkEditor'
+import { CropEditor } from './CropEditor'
+import { SignEditor } from './SignEditor'
+import { PdfEditor, type Annotation } from '@/features/editor/PdfEditor'
+import { Page } from '@/components/Page'
 import { useAppStore } from '@/store/useAppStore'
 
-const STRING_KEYS = new Set(['pages', 'ranges', 'extract', 'format', 'text', 'imagePath', 'position'])
+const STRING_KEYS = new Set([
+  'pages',
+  'ranges',
+  'extract',
+  'format',
+  'text',
+  'imagePath',
+  'position',
+  'password',
+  'confirm',
+  'signaturePath',
+  'applyTo'
+])
 
 function coerce(options: Record<string, FieldValue>): Record<string, unknown> {
   const out: Record<string, unknown> = {}
@@ -36,6 +52,7 @@ export function ToolPage(): JSX.Element {
   const [editingId, setEditingId] = useState<string | null>(null)
   const [viewingId, setViewingId] = useState<string | null>(null)
   const [pageItems, setPageItems] = useState<PageItem[]>([])
+  const [annotations, setAnnotations] = useState<Annotation[]>([])
   const [phase, setPhase] = useState<'setup' | 'running' | 'done'>('setup')
   const [progress, setProgress] = useState<JobProgress | null>(null)
   const [result, setResult] = useState<JobResult | null>(null)
@@ -65,9 +82,14 @@ export function ToolPage(): JSX.Element {
     }
   }, [])
 
+  const validationError = useMemo(
+    () => (tool?.validate ? tool.validate(options) : null),
+    [tool, options]
+  )
+
   const canRun = useMemo(
-    () => !!tool && files.length >= tool.minFiles,
-    [tool, files.length]
+    () => !!tool && files.length >= tool.minFiles && !validationError,
+    [tool, files.length, validationError]
   )
 
   if (!tool) {
@@ -113,6 +135,9 @@ export function ToolPage(): JSX.Element {
         .map((it) => ({ page: it.globalPage, rotate: it.rotate }))
       opts = { order }
     }
+    if (tool.interactive === 'edit') {
+      opts = { ...opts, annotations }
+    }
 
     const res = await window.api.runJob({
       jobId,
@@ -128,6 +153,7 @@ export function ToolPage(): JSX.Element {
   const reset = (): void => {
     setFiles([])
     setPageItems([])
+    setAnnotations([])
     setResult(null)
     setPhase('setup')
     setOptions(defaultOptions(tool))
@@ -136,7 +162,7 @@ export function ToolPage(): JSX.Element {
   const editingFile = files.find((f) => f.id === editingId) ?? null
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-8">
+    <Page>
       <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-xs text-muted hover:text-fg">
         <ArrowLeft size={14} /> All tools
       </Link>
@@ -145,7 +171,7 @@ export function ToolPage(): JSX.Element {
           <tool.icon size={22} />
         </span>
         <div>
-          <h1 className="text-2xl font-bold">{tool.name}</h1>
+          <h1 className="font-display text-3xl font-semibold">{tool.name}</h1>
           <p className="mt-0.5 text-sm text-muted">{tool.description}</p>
         </div>
       </div>
@@ -166,7 +192,7 @@ export function ToolPage(): JSX.Element {
         {phase === 'done' && result && <ResultView result={result} onReset={reset} />}
 
         {phase === 'setup' && (
-          <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
+          <div className="grid gap-6 lg:grid-cols-[1fr_320px] 2xl:grid-cols-[1fr_360px]">
             <div className="space-y-4">
               {files.length === 0 ? (
                 <Dropzone accept={tool.accept} multiple={tool.multiple} onFiles={addFiles} />
@@ -174,7 +200,11 @@ export function ToolPage(): JSX.Element {
                 <>
                   {tool.organize ? (
                     <PageGrid files={files} items={pageItems} setItems={setPageItems} />
-                  ) : tool.interactive === 'watermark' ? (
+                  ) : tool.interactive === 'edit' ? (
+                    <PdfEditor file={files[0]} annotations={annotations} onChange={setAnnotations} />
+                  ) : tool.interactive === 'watermark' ||
+                    tool.interactive === 'crop' ||
+                    tool.interactive === 'sign' ? (
                     <>
                       <FileList
                         files={files}
@@ -182,11 +212,27 @@ export function ToolPage(): JSX.Element {
                         onMove={move}
                         onView={(id) => setViewingId(id)}
                       />
-                      <WatermarkEditor
-                        file={files[0]}
-                        values={options}
-                        onChange={(patch) => setOptions((o) => ({ ...o, ...patch }))}
-                      />
+                      {tool.interactive === 'watermark' && (
+                        <WatermarkEditor
+                          file={files[0]}
+                          values={options}
+                          onChange={(patch) => setOptions((o) => ({ ...o, ...patch }))}
+                        />
+                      )}
+                      {tool.interactive === 'crop' && (
+                        <CropEditor
+                          file={files[0]}
+                          values={options}
+                          onChange={(patch) => setOptions((o) => ({ ...o, ...patch }))}
+                        />
+                      )}
+                      {tool.interactive === 'sign' && (
+                        <SignEditor
+                          file={files[0]}
+                          values={options}
+                          onChange={(patch) => setOptions((o) => ({ ...o, ...patch }))}
+                        />
+                      )}
                     </>
                   ) : (
                     <FileList
@@ -218,10 +264,15 @@ export function ToolPage(): JSX.Element {
               <button className="btn-primary w-full" disabled={!canRun} onClick={run}>
                 <Play size={15} /> {tool.primaryLabel}
               </button>
-              {!canRun && files.length > 0 && (
-                <p className="text-center text-xs text-muted">
-                  Add at least {tool.minFiles} file{tool.minFiles > 1 ? 's' : ''}.
-                </p>
+              {validationError && files.length > 0 ? (
+                <p className="text-center text-xs text-brand">{validationError}</p>
+              ) : (
+                !canRun &&
+                files.length > 0 && (
+                  <p className="text-center text-xs text-muted">
+                    Add at least {tool.minFiles} file{tool.minFiles > 1 ? 's' : ''}.
+                  </p>
+                )
               )}
             </aside>
           </div>
@@ -240,6 +291,6 @@ export function ToolPage(): JSX.Element {
         path={files.find((f) => f.id === viewingId)?.path ?? null}
         onClose={() => setViewingId(null)}
       />
-    </div>
+    </Page>
   )
 }

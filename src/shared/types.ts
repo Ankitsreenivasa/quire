@@ -17,8 +17,36 @@ export type ToolId =
   | 'page-numbers'
   | 'watermark-pdf'
   | 'organize-pdf'
+  | 'crop-pdf'
+  | 'sign-pdf'
+  | 'protect-pdf'
+  | 'unlock-pdf'
+  | 'edit-pdf'
   | 'image-compress'
   | 'video-compress'
+
+/** A single annotation drawn on top of a PDF page by the Edit PDF tool. */
+export interface PdfAnnotation {
+  id: string
+  /** 1-based page number */
+  page: number
+  type: 'text' | 'rect' | 'ellipse' | 'line' | 'arrow' | 'draw' | 'highlight' | 'image'
+  /** bounding box in PDF points; x,y is the top-left corner, y measured from the page top */
+  x: number
+  y: number
+  w: number
+  h: number
+  color: string
+  fill?: boolean
+  strokeWidth?: number
+  opacity?: number
+  text?: string
+  fontSize?: number
+  /** freehand points, relative to (x,y), in points */
+  points?: { x: number; y: number }[]
+  /** local path for an image annotation */
+  imagePath?: string
+}
 
 /** A file the user has added to a tool, as seen by the renderer. */
 export interface InputFile {
@@ -114,6 +142,7 @@ export const IPC = {
   jobProgress: 'job:progress',
   probeFiles: 'files:probe',
   renderPdf: 'pdf:render',
+  saveTempImage: 'media:saveTemp',
   pickFiles: 'dialog:pickFiles',
   pickDir: 'dialog:pickDir',
   saveResults: 'results:save',

@@ -86,6 +86,22 @@ function FieldRow({
     )
   }
 
+  if (field.type === 'password') {
+    return (
+      <label className="block">
+        <span className="label mb-1.5 block">{field.label}</span>
+        <input
+          type="password"
+          className="input"
+          value={String(value ?? '')}
+          placeholder={field.placeholder}
+          autoComplete="new-password"
+          onChange={(e) => set(e.target.value)}
+        />
+      </label>
+    )
+  }
+
   if (field.type === 'number') {
     return (
       <label className="block">
@@ -94,7 +110,7 @@ function FieldRow({
           <input
             type="number"
             className="input"
-            value={Number(value)}
+            value={Number.isFinite(Number(value)) ? Number(value) : (field.default ?? 0)}
             min={field.min}
             max={field.max}
             step={field.step ?? 1}

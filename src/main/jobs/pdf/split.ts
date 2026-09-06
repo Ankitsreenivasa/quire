@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument } from '@cantoo/pdf-lib'
 import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { parseRangeGroups, parsePageRange } from './ranges'

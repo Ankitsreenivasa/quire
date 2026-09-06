@@ -1,4 +1,4 @@
-import { ipcMain, dialog, shell, BrowserWindow, nativeTheme } from 'electron'
+import { ipcMain, app, dialog, shell, BrowserWindow, nativeTheme } from 'electron'
 import { promises as fs } from 'fs'
 import { join, basename, dirname, extname, parse } from 'path'
 import { IPC, type JobRequest, type JobResultFile, type ThemeMode } from '../../shared/types'
@@ -69,6 +69,17 @@ export function registerIpc(getWindow: () => BrowserWindow | null): void {
       return { path: target, name: basename(target), size: stat.size }
     }
   )
+
+  ipcMain.handle(IPC.saveTempImage, async (_e, dataUrl: string): Promise<string> => {
+    const m = /^data:image\/(png|jpe?g|webp);base64,(.+)$/i.exec(dataUrl)
+    if (!m) throw new Error('Unsupported image data')
+    const ext = m[1].toLowerCase().replace('jpeg', 'jpg')
+    const dir = join(app.getPath('temp'), 'pdf-converter')
+    await ensureDir(dir)
+    const target = await uniquePath(dir, `img-${Date.now()}.${ext}`)
+    await fs.writeFile(target, Buffer.from(m[2], 'base64'))
+    return target
+  })
 
   ipcMain.handle(IPC.revealPath, (_e, p: string) => shell.showItemInFolder(p))
   ipcMain.handle(IPC.openPath, (_e, p: string) => shell.openPath(p))

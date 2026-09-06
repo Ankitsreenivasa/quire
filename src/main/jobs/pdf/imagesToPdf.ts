@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument } from '@cantoo/pdf-lib'
 import { applyTransforms } from '../media/imageTransform'
 import { writeResult, stem } from '../fsutil'
 import { throwIfAborted, type JobRunner } from '../types'

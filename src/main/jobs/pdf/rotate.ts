@@ -1,4 +1,4 @@
-import { degrees } from 'pdf-lib'
+import { degrees } from '@cantoo/pdf-lib'
 import { loadPdfDoc } from './load'
 import { writeResult, stem } from '../fsutil'
 import { parsePageRange } from './ranges'

@@ -9,6 +9,11 @@ import { rotatePdf } from './pdf/rotate'
 import { pageNumbersPdf } from './pdf/pageNumbers'
 import { watermarkPdf } from './pdf/watermark'
 import { organizePdf } from './pdf/organize'
+import { cropPdf } from './pdf/cropPdf'
+import { signPdf } from './pdf/signPdf'
+import { protectPdf } from './pdf/protectPdf'
+import { unlockPdf } from './pdf/unlockPdf'
+import { editPdf } from './pdf/editPdf'
 import { imageCompress } from './media/imageCompress'
 import { videoCompress } from './media/videoCompress'
 
@@ -22,6 +27,11 @@ export const RUNNERS: Record<ToolId, JobRunner> = {
   'page-numbers': pageNumbersPdf,
   'watermark-pdf': watermarkPdf,
   'organize-pdf': organizePdf,
+  'crop-pdf': cropPdf,
+  'sign-pdf': signPdf,
+  'protect-pdf': protectPdf,
+  'unlock-pdf': unlockPdf,
+  'edit-pdf': editPdf,
   'image-compress': imageCompress,
   'video-compress': videoCompress
 }
@@ -36,6 +46,11 @@ export const TOOL_NAMES: Record<ToolId, string> = {
   'page-numbers': 'Page Numbers',
   'watermark-pdf': 'Watermark',
   'organize-pdf': 'Organize PDF',
+  'crop-pdf': 'Crop PDF',
+  'sign-pdf': 'Sign PDF',
+  'protect-pdf': 'Protect PDF',
+  'unlock-pdf': 'Unlock PDF',
+  'edit-pdf': 'Edit PDF',
   'image-compress': 'Compress Image',
   'video-compress': 'Compress Video'
 }

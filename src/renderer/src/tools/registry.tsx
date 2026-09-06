@@ -11,6 +11,11 @@ import {
   LayoutGrid,
   ImageDown,
   Film,
+  Crop,
+  Signature,
+  ShieldCheck,
+  Unlock,
+  PencilRuler,
   type LucideIcon
 } from 'lucide-react'
 
@@ -25,6 +30,7 @@ export type Field =
   | { type: 'toggle'; key: string; label: string; default: boolean; when?: (v: Record<string, FieldValue>) => boolean }
   | { type: 'color'; key: string; label: string; default: string; when?: (v: Record<string, FieldValue>) => boolean }
   | { type: 'imagefile'; key: string; label: string; when?: (v: Record<string, FieldValue>) => boolean }
+  | { type: 'password'; key: string; label: string; placeholder?: string; when?: (v: Record<string, FieldValue>) => boolean }
 
 export interface Tool {
   id: ToolId
@@ -39,9 +45,11 @@ export interface Tool {
   reorder?: boolean
   organize?: boolean
   /** tool renders a custom interactive stage instead of the plain file list */
-  interactive?: 'watermark'
+  interactive?: 'watermark' | 'crop' | 'sign' | 'edit'
   primaryLabel: string
   fields: Field[]
+  /** returns an error string to block Run, or null when the options are valid */
+  validate?: (v: Record<string, FieldValue>) => string | null
 }
 
 const IMG = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'tiff', 'tif', 'bmp', 'gif', 'heic', 'heif']
@@ -213,6 +221,111 @@ export const TOOLS: Tool[] = [
     fields: []
   },
   {
+    id: 'crop-pdf',
+    name: 'Crop PDF',
+    description: 'Trim page margins or crop to a region. Drag the box, apply to one or all pages.',
+    icon: Crop,
+    category: 'edit',
+    accept: ['pdf'],
+    multiple: true,
+    minFiles: 1,
+    interactive: 'crop',
+    primaryLabel: 'Crop PDF',
+    fields: [
+      {
+        type: 'segmented',
+        key: 'applyTo',
+        label: 'Apply to',
+        default: 'all',
+        options: [
+          { value: 'all', label: 'All pages' },
+          { value: 'first', label: 'First page' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'sign-pdf',
+    name: 'Sign PDF',
+    description: 'Draw, type or upload a signature and place it anywhere on the document.',
+    icon: Signature,
+    category: 'edit',
+    accept: ['pdf'],
+    multiple: true,
+    minFiles: 1,
+    interactive: 'sign',
+    primaryLabel: 'Sign PDF',
+    fields: [
+      { type: 'number', key: 'page', label: 'Page', default: 1, min: 1, max: 99999 },
+      {
+        type: 'segmented',
+        key: 'applyTo',
+        label: 'Place on',
+        default: 'one',
+        options: [
+          { value: 'one', label: 'This page' },
+          { value: 'all', label: 'Every page' }
+        ]
+      }
+    ],
+    validate: (v) => (v.signaturePath ? null : 'Create a signature to continue.')
+  },
+  {
+    id: 'protect-pdf',
+    name: 'Protect PDF',
+    description: 'Encrypt a PDF with a password. Choose whether printing and copying stay allowed.',
+    icon: ShieldCheck,
+    category: 'optimize',
+    accept: ['pdf'],
+    multiple: true,
+    minFiles: 1,
+    primaryLabel: 'Protect PDF',
+    fields: [
+      { type: 'password', key: 'password', label: 'Password', placeholder: 'Choose a password' },
+      { type: 'password', key: 'confirm', label: 'Confirm password', placeholder: 'Repeat it' },
+      { type: 'toggle', key: 'allowPrinting', label: 'Allow printing', default: true },
+      { type: 'toggle', key: 'allowCopying', label: 'Allow copying text', default: true }
+    ],
+    validate: (v) => {
+      const pw = String(v.password ?? '')
+      if (!pw) return 'Enter a password.'
+      if (String(v.confirm ?? '') !== pw) return 'The two passwords do not match.'
+      return null
+    }
+  },
+  {
+    id: 'unlock-pdf',
+    name: 'Unlock PDF',
+    description: 'Remove password protection from a PDF you can already open.',
+    icon: Unlock,
+    category: 'optimize',
+    accept: ['pdf'],
+    multiple: true,
+    minFiles: 1,
+    primaryLabel: 'Unlock PDF',
+    fields: [
+      {
+        type: 'password',
+        key: 'password',
+        label: 'Current password',
+        placeholder: 'Leave blank if only owner-locked'
+      }
+    ]
+  },
+  {
+    id: 'edit-pdf',
+    name: 'Edit PDF',
+    description: 'Add text, shapes, highlights, freehand drawing and images on top of any page.',
+    icon: PencilRuler,
+    category: 'edit',
+    accept: ['pdf'],
+    multiple: false,
+    minFiles: 1,
+    interactive: 'edit',
+    primaryLabel: 'Apply edits',
+    fields: []
+  },
+  {
     id: 'image-compress',
     name: 'Compress Image',
     description: 'Reduce image file size. Convert format, cap dimensions, strip metadata. Batch friendly.',
@@ -270,6 +383,7 @@ export function defaultOptions(tool: Tool): Record<string, FieldValue> {
   for (const f of tool.fields) {
     if ('default' in f && f.default !== undefined) out[f.key] = f.default as FieldValue
     else if (f.type === 'text') out[f.key] = f.default ?? ''
+    else if (f.type === 'password') out[f.key] = ''
   }
   return out
 }
