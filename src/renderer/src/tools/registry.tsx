@@ -38,6 +38,8 @@ export interface Tool {
   editable?: boolean
   reorder?: boolean
   organize?: boolean
+  /** tool renders a custom interactive stage instead of the plain file list */
+  interactive?: 'watermark'
   primaryLabel: string
   fields: Field[]
 }
@@ -181,19 +183,20 @@ export const TOOLS: Tool[] = [
     accept: ['pdf'],
     multiple: true,
     minFiles: 1,
+    interactive: 'watermark',
     primaryLabel: 'Add watermark',
     fields: [
       { type: 'segmented', key: 'type', label: 'Type', default: 'text', options: [{ value: 'text', label: 'Text' }, { value: 'image', label: 'Image' }] },
       { type: 'text', key: 'text', label: 'Text', default: 'CONFIDENTIAL', when: (v) => v.type === 'text' },
-      { type: 'number', key: 'fontSize', label: 'Font size', default: 48, min: 8, max: 160, when: (v) => v.type === 'text' },
       { type: 'color', key: 'color', label: 'Colour', default: '#888888', when: (v) => v.type === 'text' },
       { type: 'imagefile', key: 'imagePath', label: 'Watermark image', when: (v) => v.type === 'image' },
-      { type: 'range', key: 'scale', label: 'Image size', default: 0.4, min: 0.1, max: 1, step: 0.05, when: (v) => v.type === 'image' },
       { type: 'range', key: 'opacity', label: 'Opacity', default: 0.3, min: 0.05, max: 1, step: 0.05 },
-      { type: 'number', key: 'angle', label: 'Angle', default: 45, min: -90, max: 90, suffix: '°' },
+      { type: 'range', key: 'angle', label: 'Angle', default: 45, min: -90, max: 90, step: 1, suffix: '°' },
       { type: 'toggle', key: 'tile', label: 'Tile across page', default: false },
-      { type: 'select', key: 'position', label: 'Position', default: 'center', when: (v) => !v.tile, options: [{ value: 'center', label: 'Center' }, ...pos.filter((p) => !p.value.includes('center'))] },
-      { type: 'text', key: 'pages', label: 'Pages (blank = all)', placeholder: 'e.g. 1-5', default: '' }
+      { type: 'text', key: 'pages', label: 'Pages (blank = all)', placeholder: 'e.g. 1-5', default: '' },
+      // driven by the interactive stage
+      { type: 'number', key: 'fontSize', label: 'Text size', default: 48, min: 8, max: 400, suffix: 'pt', when: (v) => v.type === 'text' && !!v.tile },
+      { type: 'range', key: 'scale', label: 'Image size', default: 0.4, min: 0.05, max: 1, step: 0.01, when: (v) => v.type === 'image' && !!v.tile }
     ]
   },
   {

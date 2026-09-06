@@ -87,6 +87,13 @@ export interface JobRequest<T = Record<string, unknown>> {
   outDir?: string
 }
 
+export interface RenderedPage {
+  page: number
+  dataUrl: string
+  width: number
+  height: number
+}
+
 export interface AppSettings {
   theme: ThemeMode
   outDir: string
@@ -104,6 +111,7 @@ export const IPC = {
   cancelJob: 'job:cancel',
   jobProgress: 'job:progress',
   probeFiles: 'files:probe',
+  renderPdf: 'pdf:render',
   pickFiles: 'dialog:pickFiles',
   pickDir: 'dialog:pickDir',
   saveResults: 'results:save',

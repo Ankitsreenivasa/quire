@@ -20,6 +20,9 @@ interface Options {
   tile?: boolean
   scale?: number // image scale 0..1 of page width
   pages?: string
+  /** normalized center from the interactive editor (0..1, y measured from top) */
+  xPct?: number
+  yPct?: number
 }
 
 function hexToRgb(hex?: string) {
@@ -59,12 +62,20 @@ export const watermarkPdf: JobRunner = async (req, ctx) => {
       if (target && !target.has(idx + 1)) return
       const { width, height } = page.getSize()
 
+      const rad = (angle * Math.PI) / 180
+      // rotate an offset (dx,dy) about origin, so the watermark spins about its own centre
+      const rot = (cx: number, cy: number, dx: number, dy: number): { x: number; y: number } => ({
+        x: cx + dx * Math.cos(rad) - dy * Math.sin(rad),
+        y: cy + dx * Math.sin(rad) + dy * Math.cos(rad)
+      })
+
       const drawOne = (cx: number, cy: number) => {
         if (type === 'text' && font) {
           const tw = font.widthOfTextAtSize(text, fontSize)
+          const o = rot(cx, cy, -tw / 2, -fontSize * 0.32)
           page.drawText(text, {
-            x: cx - tw / 2,
-            y: cy - fontSize / 2,
+            x: o.x,
+            y: o.y,
             size: fontSize,
             font,
             color,
@@ -74,9 +85,10 @@ export const watermarkPdf: JobRunner = async (req, ctx) => {
         } else if (image) {
           const w = width * (opts.scale ?? 0.4)
           const h = (image.height / image.width) * w
+          const o = rot(cx, cy, -w / 2, -h / 2)
           page.drawImage(image, {
-            x: cx - w / 2,
-            y: cy - h / 2,
+            x: o.x,
+            y: o.y,
             width: w,
             height: h,
             opacity,
@@ -93,6 +105,8 @@ export const watermarkPdf: JobRunner = async (req, ctx) => {
             drawOne(gx * stepX, gy * stepY)
           }
         }
+      } else if (opts.xPct !== undefined && opts.yPct !== undefined) {
+        drawOne(opts.xPct * width, (1 - opts.yPct) * height)
       } else {
         const pad = 80
         const px =

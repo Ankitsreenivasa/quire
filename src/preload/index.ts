@@ -8,6 +8,7 @@ import {
   type JobRequest,
   type JobResult,
   type JobResultFile,
+  type RenderedPage,
   type ThemeMode
 } from '../shared/types'
 
@@ -20,6 +21,8 @@ const api = {
     return () => ipcRenderer.removeListener(IPC.jobProgress, handler)
   },
   probeFiles: (paths: string[]): Promise<InputFile[]> => ipcRenderer.invoke(IPC.probeFiles, paths),
+  renderPdf: (filePath: string, width?: number): Promise<RenderedPage[]> =>
+    ipcRenderer.invoke(IPC.renderPdf, filePath, width),
   pickFiles: (filters?: Electron.FileFilter[]): Promise<string[]> =>
     ipcRenderer.invoke(IPC.pickFiles, filters),
   pickDir: (): Promise<string | null> => ipcRenderer.invoke(IPC.pickDir),

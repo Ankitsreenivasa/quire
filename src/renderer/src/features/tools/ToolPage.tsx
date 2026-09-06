@@ -12,6 +12,7 @@ import { ResultView } from '@/components/ResultView'
 import { ImageEditor } from '@/features/editor/ImageEditor'
 import { PreviewModal } from '@/components/PreviewModal'
 import { PageGrid, type PageItem } from './PageGrid'
+import { WatermarkEditor } from './WatermarkEditor'
 import { useAppStore } from '@/store/useAppStore'
 
 const STRING_KEYS = new Set(['pages', 'ranges', 'extract', 'format', 'text', 'imagePath', 'position'])
@@ -173,6 +174,20 @@ export function ToolPage(): JSX.Element {
                 <>
                   {tool.organize ? (
                     <PageGrid files={files} items={pageItems} setItems={setPageItems} />
+                  ) : tool.interactive === 'watermark' ? (
+                    <>
+                      <FileList
+                        files={files}
+                        onRemove={(id) => setFiles((c) => c.filter((f) => f.id !== id))}
+                        onMove={move}
+                        onView={(id) => setViewingId(id)}
+                      />
+                      <WatermarkEditor
+                        file={files[0]}
+                        values={options}
+                        onChange={(patch) => setOptions((o) => ({ ...o, ...patch }))}
+                      />
+                    </>
                   ) : (
                     <FileList
                       files={files}

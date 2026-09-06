@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { RotateCw, Trash2, Undo2, Loader2 } from 'lucide-react'
 import type { InputFile } from '@shared/types'
-import { renderPdfThumbnails } from '@/lib/pdfThumbs'
-import { mediaUrl } from '@/lib/cn'
 
 export interface PageItem {
   uid: string
@@ -28,7 +26,7 @@ export function PageGrid({ files, items, setItems }: Props): JSX.Element {
       const collected: PageItem[] = []
       let offset = 0
       for (const f of files) {
-        const thumbs = await renderPdfThumbnails(mediaUrl(f.path))
+        const thumbs = await window.api.renderPdf(f.path, 240)
         if (cancelled) return
         thumbs.forEach((t) => {
           collected.push({

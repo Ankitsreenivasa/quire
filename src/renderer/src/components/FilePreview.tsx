@@ -9,7 +9,7 @@ export function FilePreview({ path, className }: { path: string; className?: str
   const ext = path.split('.').pop()?.toLowerCase() ?? ''
   const url = mediaUrl(path)
 
-  if (ext === 'pdf') return <PdfViewer url={url} className={className} />
+  if (ext === 'pdf') return <PdfViewer path={path} className={className} />
 
   if (IMG.includes(ext)) {
     return (

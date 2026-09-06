@@ -4,6 +4,7 @@ import { join, basename, dirname, extname, parse } from 'path'
 import { IPC, type JobRequest, type JobResultFile, type ThemeMode } from '../../shared/types'
 import { jobQueue } from '../jobs/queue'
 import { probeFiles } from '../jobs/probe'
+import { renderPdfPages } from '../jobs/pdf/renderPages'
 import { uniquePath, ensureDir } from '../jobs/fsutil'
 import { getSettings, setSettings, getHistory, clearHistory } from '../store'
 
@@ -15,6 +16,9 @@ export function registerIpc(getWindow: () => BrowserWindow | null): void {
   ipcMain.handle(IPC.runJob, (_e, req: JobRequest) => jobQueue.submit(req))
   ipcMain.handle(IPC.cancelJob, (_e, jobId: string) => jobQueue.cancel(jobId))
   ipcMain.handle(IPC.probeFiles, (_e, paths: string[]) => probeFiles(paths))
+  ipcMain.handle(IPC.renderPdf, (_e, filePath: string, width?: number) =>
+    renderPdfPages(filePath, width)
+  )
 
   ipcMain.handle(IPC.pickFiles, async (_e, filters?: Electron.FileFilter[]) => {
     const win = getWindow()
