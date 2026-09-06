@@ -5,16 +5,25 @@ compress PDFs, images and video entirely on your machine — nothing is uploaded
 
 ## Download
 
-Grab the installer for your OS from the [Releases](../../releases) page:
+Latest build for your OS (always the newest published release):
 
-| OS | File |
+| OS | Download |
 |---|---|
-| macOS (Apple Silicon / Intel) | `PDF Converter-<version>-arm64.dmg` / `-x64.dmg` |
-| Windows 10/11 (x64) | `PDF Converter Setup <version>.exe` |
-| Linux | `PDF Converter-<version>.AppImage` or `.deb` |
+| **macOS** — Apple Silicon (M1–M4) | [PDF-Converter-mac-arm64.dmg](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-mac-arm64.dmg) |
+| **macOS** — Intel | [PDF-Converter-mac-x64.dmg](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-mac-x64.dmg) |
+| **Windows** 10 / 11 (x64) | [PDF-Converter-win-x64.exe](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-win-x64.exe) |
+| **Linux** — portable | [PDF-Converter-linux-x64.AppImage](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-linux-x64.AppImage) |
+| **Linux** — Debian / Ubuntu | [PDF-Converter-linux-x64.deb](https://github.com/Ankitsreenivasa/quire/releases/latest/download/PDF-Converter-linux-x64.deb) |
 
-Builds are **not code-signed** yet, so the OS will warn on first launch — see
-[BUILD.md](BUILD.md#opening-an-unsigned-build) for the one-time steps to open them.
+All other builds (older versions, macOS `.zip`) are on the
+[Releases](https://github.com/Ankitsreenivasa/quire/releases) page.
+
+Builds are **not code-signed** yet, so the OS warns on first launch — see
+[BUILD.md](BUILD.md#opening-an-unsigned-build) for the one-time steps:
+
+- **macOS**: right-click the app → **Open** → **Open**
+- **Windows**: **More info** → **Run anyway**
+- **Linux**: `chmod +x PDF-Converter-linux-x64.AppImage` then run it
 
 ## Features
 

@@ -22,19 +22,19 @@ npm version patch          # bumps package.json, creates a git tag vX.Y.Z
 git push --follow-tags
 ```
 
-The tag triggers the workflow: it builds all three OSes, then opens a **draft** GitHub
-Release with the installers attached. Review it and publish.
+The tag triggers the workflow: it builds all three OSes, then **publishes** a GitHub Release
+with the installers attached and auto-generated notes.
 
 You can also run the workflow manually (`Actions → Build & Release → Run workflow`) to get
 artifacts without tagging — no Release is created in that case.
 
-Outputs:
+Outputs (file names are version-free so `releases/latest/download/<name>` permalinks stay valid):
 
 | OS | Files |
 |---|---|
-| macOS | `*-arm64.dmg`, `*-x64.dmg`, `*-arm64-mac.zip`, `*-x64-mac.zip` |
-| Windows | `PDF Converter Setup *.exe` (NSIS, x64) |
-| Linux | `*.AppImage`, `*.deb` |
+| macOS | `PDF-Converter-mac-arm64.dmg`, `PDF-Converter-mac-x64.dmg`, `PDF-Converter-mac-{arm64,x64}.zip` |
+| Windows | `PDF-Converter-win-x64.exe` (NSIS) |
+| Linux | `PDF-Converter-linux-x64.AppImage`, `PDF-Converter-linux-x64.deb` |
 
 ## Local single-OS build
 
@@ -61,5 +61,5 @@ available, add `mac.identity`, an `entitlements` file and the `APPLE_ID` / `APPL
 - **macOS**: right-click the app → **Open** → **Open** (once). Or, if it was quarantined:
   `xattr -dr com.apple.quarantine "/Applications/PDF Converter.app"`.
 - **Windows**: SmartScreen → **More info** → **Run anyway**.
-- **Linux**: `chmod +x "PDF Converter-*.AppImage"` then run it. For the `.deb`:
-  `sudo apt install ./PDF*.deb`.
+- **Linux**: `chmod +x PDF-Converter-linux-x64.AppImage` then run it. For the `.deb`:
+  `sudo apt install ./PDF-Converter-linux-x64.deb`.
